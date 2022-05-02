@@ -58,10 +58,15 @@ let sound1;
 // scene 1 preload
 function scene1Preload() {
   // preload our image and audio file
-  this.load.image("title", "assets/images/PreGameImg.png");
+  this.load.image("title", "assets/images/preGame.png");
   console.log("PreGame");
   // load audio asset files use this.load.audio()
   this.load.audio("music", "assets/sounds/cute.mp3");
+  // load help button
+  this.load.image("help", "assets/sprites/exclude.png");
+  // load sound buttons
+  this.load.image("soundOn", "assets/sprites/soundOn.png");
+  this.load.image("soundOff", "assets/sprites/soundOff.png");
 
 }
 
@@ -69,6 +74,15 @@ function scene1Preload() {
 function scene1Create() {
   // make a image game object to show our bkgnd image
   scene1image = this.add.image(0, 0, "title").setOrigin(0, 0);
+   const soundOnButton = this.add.image(70, 70, "soundOn").setInteractive()
+  const soundOffButton = this.add.image(70, 130, "soundOff").setInteractive();
+
+  soundOnButton.on('pointerup', playsound, this);
+
+   soundOffButton.on('pointerup', mutesound, this);
+
+  const helpButton = this.add.image(740, 531, "help").setInteractive()
+  
    const startButton = this.add.rectangle(400, 500, 177, 77, 0x000).setInteractive()
 
         startButton.setInteractive({ useHandCursor: true })
@@ -104,6 +118,15 @@ function scene1Create() {
   */
 }
 
+//credits to phoenix studios: https://phaser.discourse.group/t/call-a-phaser-function-from-html-js/11350
+  //OUTSIDE CREATE - GLOBAL FUNCTION
+function mutesound() {
+  sound1.setMute(true);
+};
+function playsound() {
+  sound1.setMute(false);
+};
+
 // scene 1 update
 function scene1Update() {}
 
@@ -126,7 +149,7 @@ function scene2Preload() {
   });
   this.load.audio("meadowThoughts", "assets/sounds/thatsItForToday.mp3");
   this.load.image("meadow", "assets/images/meadow.jpg");
-  this.load.image("ground", "assets/platform.png");
+  this.load.image("ground", "assets/sprites/platform.png");
   this.load.image("carrot", "assets/sprites/carrot1.png");
 
   
