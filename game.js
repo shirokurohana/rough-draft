@@ -74,16 +74,18 @@ function scene1Preload() {
 function scene1Create() {
   // make a image game object to show our bkgnd image
   scene1image = this.add.image(0, 0, "title").setOrigin(0, 0);
-   const soundOnButton = this.add.image(70, 70, "soundOn").setInteractive()
-  const soundOffButton = this.add.image(70, 130, "soundOff").setInteractive();
+   const soundOnButton = this.add.image(70, 70, "soundOn").setInteractive({ useHandCursor: true })
+  const soundOffButton = this.add.image(70, 130, "soundOff").setInteractive({ useHandCursor: true });
 
   soundOnButton.on('pointerup', playsound, this);
 
    soundOffButton.on('pointerup', mutesound, this);
 
-  const helpButton = this.add.image(740, 531, "help").setInteractive()
+  const helpButton = this.add.image(740, 531, "help").setInteractive({ useHandCursor: true })
+  helpButton.on('pointerup', showText, this);
+  helpButton.on('pointerover', destroyText, this)
   
-   const startButton = this.add.rectangle(400, 500, 177, 77, 0x000).setInteractive()
+   const startButton = this.add.rectangle(400, 500, 177, 77, 0x000).setInteractive({ useHandCursor: true })
 
         startButton.setInteractive({ useHandCursor: true })
       startButton.on('pointerover', function(){startButton.fillColor = 0x2F8085})
@@ -126,6 +128,24 @@ function mutesound() {
 function playsound() {
   sound1.setMute(false);
 };
+
+function showText() {
+  helpText = this.add.text(650, 440, "Type the words on \n the screen to get points \n and keep Zoom Zoom \n alive", {
+    fontFamily: "Balsamiq Sans",
+
+    color: "#fff",
+    fontSize: "12px",
+  });
+};
+function destroyText() {
+  helpText = this.add.text(650, 440, "", {
+    fontFamily: "Balsamiq Sans",
+
+    color: "#fff",
+    fontSize: "12px",
+  });
+};
+
 
 // scene 1 update
 function scene1Update() {}
