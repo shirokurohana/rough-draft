@@ -102,7 +102,7 @@ function scene1Create() {
   sound1 = this.sound.add("music");
   sound1.play({
     volume: 0.2, // set to 50% of volume level
-    loop: false, // make audio play repeat over and over
+    loop: true, // make audio play repeat over and over
   });
 
   // credits to: https://codepen.io/samme/pen/XWbReRd
