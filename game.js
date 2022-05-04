@@ -66,10 +66,11 @@ var config = {
         parent: 'phaser-example',
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 800,
-        height: 600
+        height: 600,
+     pixelArt: true,
     },
  
-  pixelArt: true,
+ 
  
   
   dom: {
