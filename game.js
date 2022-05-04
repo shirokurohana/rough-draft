@@ -24,6 +24,11 @@
 // issue #2: full screen works only on menu screen
 // issue #3: can't stop sound when mute is true
 
+// Missing: 
+// 1) move Zoom Zoom on each character input that is correct
+// 2) WPM score
+
+
 // Restart scene: https://phaser.discourse.group/t/safely-restarting-a-scene/11557
 
 // credits to icons: https://www.figma.com/file/awrmHskj79PjSAJZnGgPfk/Flex-Icon-Set-(Community)?node-id=901%3A1077
@@ -323,7 +328,7 @@ function scene2Create() {
   // credits to jjcapellan: https://phaser.discourse.group/t/countdown-timer/2471/4
   console.log("create timer");
   // 2:30 in seconds
-  this.initialTime = 60;
+  this.initialTime = 30;
 
   // Each 1000 ms call onEvent
   timedEvent = this.time.addEvent({
@@ -344,7 +349,13 @@ function scene2Create() {
   wrong = this.sound.add("wrong", { loop: false });
   
   this.add.image(0, 0, "meadow").setOrigin(0, 0);
-  scoreText = this.add.text(415, 15, "score: 0", {
+  scoreText = this.add.text(450, 15, "score: 0", {
+    fontFamily: "Balsamiq Sans",
+
+    color: "#a579d4",
+    fontSize: "32px",
+  });
+  wpmText = this.add.text(300, 15, "WPM: ", {
     fontFamily: "Balsamiq Sans",
 
     color: "#a579d4",
@@ -730,7 +741,7 @@ function onEvent() {
     clock.play();
   }
   if (this.initialTime < 0) {
-    timeText.setText("game\nover");
+    timeText.setText("game over");
     clock.stop();
     completeTask.play();
     completeTask.stop();
@@ -805,3 +816,52 @@ function backToMenu() {
 function enterSoundNow(){
   enterSound.play();
 }
+
+/* notes for calculating WPM: https://stackoverflow.com/questions/65854300/how-to-add-a-word-per-minute-calculator-to-a-website-using-javascript-html-or
+// Split the string to an array of words
+var words = string.split(" ");
+
+text.innerHTML = "";
+// For each word, add it as a span element in the text
+words.forEach(w => {
+    let el = document.createElement("span");
+    el.innerText = w;
+    text.appendChild(el);
+    text.innerHTML += " ";
+});
+
+input.addEventListener("keyup", () => {
+    // Split the input to an array of words
+    let input_words = input.value.split(" ");
+    let good = true;
+
+    if (finished)
+        return;
+    if (!start)
+        start = Date.now();
+
+    // Iterate over all the words
+    for (let i = 0; i < words.length; i++) {
+        let element = words[i];
+        // If the word is not the same as the word at same position in the input, set 'good' at false
+        if (input_words[i] != element)
+            good = false;
+        // Set the background color for the word, selecting the element
+        // by the parent's children index (corresponding to i) to avoid the usage of ids
+        text.children[i].style.backgroundColor = good ? "green" : null;
+    }
+    // If all words are correct, the variable is still true
+    if (good)
+    {
+        finished = true;
+        // Get the difference in seonds between start and now
+        let elapsed = (Date.now() - start) / 1000;
+        // Get words per seconde
+        let words_per_seconde = words.length * 60 / elapsed;
+        // Round to the fourth decimal
+        words_per_seconde = Math.round(words_per_seconde * 1000) / 1000;
+        alert(words_per_seconde + " words per minute.");
+    }
+});
+
+*/
