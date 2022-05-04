@@ -10,6 +10,9 @@
 // 10) credits to p0ss for Interface Sounds Starter Pack (appear-online.ogg): https://opengameart.org/content/interface-sounds-starter-pack
 // 11) credits to wobbleboxx for assets/sounds/wrong.mp3 and ../.../levelUp.mp3: https://opengameart.org/content/level-up-power-up-coin-get-13-sounds
 // 12) credits to jalastram - Jesús Lastra - for assets/sounds/enter.wav: https://opengameart.org/content/gui-sound-effects-4
+// 13) credits to full screen: https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/ui/fullscreen-white.png
+// 14) credits to assets/sounds/clock.wav: https://opengameart.org/content/ticking-clock-0
+// 15) credits to assets/sounds/completeTask.mp3: https://opengameart.org/content/completion-sound
 
 // Meeting 2, thank you to Professor: https://stackoverflow.com/questions/7060750/detect-the-enter-key-in-a-text-input-field
 // the keyup() method returns a value to your function. In the example, they capture that value in a local parameter variable they name e. That variable contains a object value with properties. the keyCode property returns number corresponding to key pressed. Enter is number 13.
@@ -46,11 +49,18 @@ let scene3 = {
 };
 // set up configuration for the game
 var config = {
-  type: Phaser.AUTO,
-  parent: "phaser-example",
-  width: 800,
+   type: Phaser.AUTO,
+  scale: {
+        mode: Phaser.Scale.FIT,
+        parent: 'phaser-example',
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 800,
+        height: 600
+    },
+ 
   pixelArt: true,
-  height: 600,
+ 
+  
   dom: {
     createContainer: true,
   },
@@ -69,6 +79,8 @@ let scene1image;
 let sound1;
 var offNow;
 var onNow;
+var clock;
+var completeTask;
 
 // scene 1 preload
 function scene1Preload() {
@@ -79,6 +91,10 @@ function scene1Preload() {
   this.load.audio("music", "assets/sounds/cute.mp3");
   // load help button
   this.load.image("help", "assets/sprites/exclude.png");
+  // load info button
+  this.load.image("info", "assets/sprites/info.png");
+  // load full screen button
+  this.load.spritesheet('fullscreen', 'assets/sprites/fullscreen-white.png', { frameWidth: 64, frameHeight: 64 });
   // load sound buttons
   this.load.image("soundOn", "assets/sprites/soundOn.png");
   this.load.image("soundOff", "assets/sprites/soundOff.png");
@@ -112,7 +128,11 @@ function scene1Create() {
   const helpButton = this.add
     .image(740, 531, "help")
     .setInteractive({ useHandCursor: true });
+  const infoButton = this.add
+    .image(70, 531, "info")
+    .setInteractive({ useHandCursor: true });
   helpButton.on("pointerup", showText, this);
+  infoButton.on("pointerup", infoText, this);
   helpButton.on("pointerover", destroyText, this);
 
   const startButton = this.add
@@ -147,6 +167,27 @@ function scene1Create() {
     volume: 0.2, // set to 50% of volume level
     loop: true, // make audio play repeat over and over
   });
+// credits to :https://labs.phaser.io/edit.html?src=src/scalemanager/full%20screen%20game.js&v=3.55.2
+  var button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+
+        button.on('pointerup', function () {
+
+            if (this.scale.isFullscreen)
+            {   
+              appear.play();
+                button.setFrame(0);
+
+                this.scale.stopFullscreen();
+            }
+            else
+            {  
+              appear.play();
+                button.setFrame(1);
+
+                this.scale.startFullscreen();
+            }
+
+        }, this);
 
   // credits to: https://codepen.io/samme/pen/XWbReRd
   // credits to: https://www.thepolyglotdeveloper.com/2020/09/switch-between-scenes-phaser-game/
@@ -194,6 +235,20 @@ function showText() {
     }
   );
 }
+function infoText() {
+  appear.play();
+  helpText = this.add.text(
+    30,
+    430,
+    "Created by nathalie baladejo-reynosa\nfor Spring 2022 CS 42 class\nThank you Professor!\nThank you G-D!",
+    {
+      fontFamily: "Balsamiq Sans",
+
+      color: "#fff",
+      fontSize: "12px",
+    }
+  );
+}
 function destroyText() {
   helpText = this.add.text(650, 440, "", {
     fontFamily: "Balsamiq Sans",
@@ -223,6 +278,10 @@ function scene2Preload() {
     frameWidth: 78,
     frameHeight: 52,
   });
+  this.load.audio("clock", "assets/sounds/clock.wav");
+  this.load.audio("completeTask", "assets/sounds/completeTask.mp3");
+  // load full screen button
+  this.load.spritesheet('fullscreen', 'assets/sprites/fullscreen-white.png', { frameWidth: 64, frameHeight: 64 });
   this.load.audio("meadowThoughts", "assets/sounds/thatsItForToday.mp3");
   this.load.audio("levelUp", "assets/sounds/levelUp.mp3");
   this.load.audio("wrong", "assets/sounds/wrong.mp3");
@@ -234,6 +293,26 @@ function scene2Preload() {
 // scene 2 create
 function scene2Create() {
   sound1.stop();
+
+  // credits to :https://labs.phaser.io/edit.html?src=src/scalemanager/full%20screen%20game.js&v=3.55.2
+  var button = this.add.image(800-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+
+        button.on('pointerup', function () {
+
+            if (this.scale.isFullscreen)
+            {
+                button.setFrame(0);
+
+                this.scale.stopFullscreen();
+            }
+            else
+            {
+                button.setFrame(1);
+
+                this.scale.startFullscreen();
+            }
+
+        }, this);
   
   // credits to jjcapellan: https://phaser.discourse.group/t/countdown-timer/2471/4
   console.log("create timer");
@@ -252,6 +331,8 @@ function scene2Create() {
   platforms.create(640, 560, "ground").setScale(3).refreshBody();
 
   meadowThoughts = this.sound.add("meadowThoughts", { loop: true, volume: 0.2});
+  clock = this.sound.add("clock", { loop: true, volume: 0.2});
+  completeTask = this.sound.add("completeTask", { loop: true, volume: 0.2});
   crunch = this.sound.add("crunch", { loop: false });
   levelUp = this.sound.add("levelUp", { loop: false });
   wrong = this.sound.add("wrong", { loop: false });
@@ -360,7 +441,26 @@ function scene2Create() {
   element.addListener("click");
 
 
+// credits to: https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
   // Get the input field
+
+  // issue May 3, 2022: on restart, function doesn't work neither one below
+var input = document.getElementById("textField");
+
+// Execute a function when the user presses a key on the keyboard
+input.addEventListener("keypress", function(event) {
+  // If the user presses the "Enter" key on the keyboard
+  if (event.key === "Enter") {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    
+    // Trigger the button element with a click
+    document.getElementById("button-addon2").click();
+
+    // credits: https://stackoverflow.com/questions/10923719/reset-input-value-after-alert-javascript
+    document.getElementById('textField').value = "";
+  }
+}); 
 
   
 
@@ -368,6 +468,10 @@ function scene2Create() {
     
     
     if (event.target.name === "playButton") {
+
+     
+        
+   
       var inputText = this.getChildByName("nameField");
       // var inputText = document.querySelector('.form-control').value;
 
@@ -485,7 +589,8 @@ function scene2Create() {
       }
     }
       
-  });
+  })
+    ;
  /* creds to: https://www.w3schools.com/howto/howto_js_trigger_button_enter.aspvar inputStuff = document.querySelector('.form-control').value;
 
 // Execute a function when the user presses a key on the keyboard
@@ -615,8 +720,12 @@ function formatTime(seconds) {
 function onEvent() {
   this.initialTime -= 1; // One second
   timeText.setText("timer: " + formatTime(this.initialTime));
+  if (this.initialTime < 10) {
+    clock.play();
+  }
   if (this.initialTime < 0) {
     timeText.setText("GAME OVER");
+    completeTask.play();
   }
 }
 
@@ -626,29 +735,35 @@ function scene3Preload() {
   this.load.image("restart", "assets/sprites/restart.png");
   // load menu button
   this.load.image("menu", "assets/sprites/menu.png");
+  this.load.audio("enterSound", "assets/sounds/enter.wav");
 }
 // scene 3 Create
 function scene3Create() {
-  meadowThoughts.stop();
+   enterSound = this.sound.add("enterSound", { loop: false });  
+  //meadowThoughts.stop();
   const restartButton = this.add
     .image(200, 500, "restart")
     .setInteractive({ useHandCursor: true });
+  restartButton.on("pointerup", destroyGame, this);
   restartButton.on("pointerup", restartGame, this);
-  restartText = this.add.text(200, 400, "Click to restart", {
+  restartButton.on("pointerup", enterSoundNow, this);
+  restartText = this.add.text(100, 400, "5322 - Restart n/work", {
     fontFamily: "Balsamiq Sans",
 
     color: "#fff",
-    fontSize: "32px",
+    fontSize: "20px",
   });
   const menuButton = this.add
-    .image(400, 500, "menu")
+    .image(550, 500, "menu")
     .setInteractive({ useHandCursor: true });
   menuButton.on("pointerup", backToMenu, this);
-  menuText = this.add.text(400, 600, "Back to menu", {
+  menuButton.on("pointerup", enterSoundNow, this);
+  
+  menuText = this.add.text(500, 400, "Back to menu", {
     fontFamily: "Balsamiq Sans",
 
     color: "#fff",
-    fontSize: "32px",
+    fontSize: "20px",
   });
   byeByeText = this.add.text(200, 200, "Thank you for playing, bye!", {
     fontFamily: "Balsamiq Sans",
@@ -663,10 +778,22 @@ function scene3Update() {}
 function scene2Transition() {
   this.scene.start("scene3");
 }
+function destroyGame() {
 
+  // issue May 3, 2022 - scene not restarting well???
+   this.scene.stop("scene2");
+
+}
 function restartGame() {
-  this.scene.start("scene2");
+
+ 
+
+   this.scene.start('scene2');
 }
 function backToMenu() {
   this.scene.start("scene1");
+}
+
+function enterSoundNow(){
+  enterSound.play();
 }
