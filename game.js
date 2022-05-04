@@ -18,6 +18,12 @@
 // the keyup() method returns a value to your function. In the example, they capture that value in a local parameter variable they name e. That variable contains a object value with properties. the keyCode property returns number corresponding to key pressed. Enter is number 13.
 // Meeting 2, thank you to Professor: https://stackoverflow.com/questions/65854300/how-to-add-a-word-per-minute-calculator-to-a-website-using-javascript-html-or
 
+
+// May 3, 2022
+// issue #1: restart doesn't work
+// issue #2: full screen works only on menu screen
+// issue #3: can't stop sound when mute is true
+
 // Restart scene: https://phaser.discourse.group/t/safely-restarting-a-scene/11557
 
 // credits to icons: https://www.figma.com/file/awrmHskj79PjSAJZnGgPfk/Flex-Icon-Set-(Community)?node-id=901%3A1077
@@ -331,8 +337,8 @@ function scene2Create() {
   platforms.create(640, 560, "ground").setScale(3).refreshBody();
 
   meadowThoughts = this.sound.add("meadowThoughts", { loop: true, volume: 0.2});
-  clock = this.sound.add("clock", { loop: true, volume: 0.2});
-  completeTask = this.sound.add("completeTask", { loop: true, volume: 0.2});
+  clock = this.sound.add("clock", { loop: false, volume: 0.7});
+  completeTask = this.sound.add("completeTask", { loop: false, volume: 0.2});
   crunch = this.sound.add("crunch", { loop: false });
   levelUp = this.sound.add("levelUp", { loop: false });
   wrong = this.sound.add("wrong", { loop: false });
@@ -724,8 +730,10 @@ function onEvent() {
     clock.play();
   }
   if (this.initialTime < 0) {
-    timeText.setText("GAME OVER");
+    timeText.setText("game\nover");
+    clock.stop();
     completeTask.play();
+    completeTask.stop();
   }
 }
 
