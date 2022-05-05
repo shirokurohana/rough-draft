@@ -235,6 +235,7 @@ function enterGame() {
 
 function showText() {
   appear.play();
+  //if (helpText === null) {
   helpText = this.add.text(
     650,
     440,
@@ -246,13 +247,16 @@ function showText() {
       fontSize: "12px",
     }
   );
+ // } else {
+   // helpText.setText("");
+  //}
 }
 function infoText() {
   appear.play();
   helpText = this.add.text(
     30,
-    430,
-    "Created by nathalie baladejo-reynosa\nfor Spring 2022 CS 42 class\nThank you Professor!\nThank you G-D!",
+    450,
+    "Created by nathalie baladejo-reynosa\nfor Spring 2022 CS 42 class",
     {
       fontFamily: "Balsamiq Sans",
 
@@ -328,8 +332,8 @@ function scene2Create() {
   
   // credits to jjcapellan: https://phaser.discourse.group/t/countdown-timer/2471/4
   console.log("create timer");
-  // 2:30 in seconds
-  this.initialTime = 30;
+  // 1 minute in seconds
+  this.initialTime = 60;
 
   // Each 1000 ms call onEvent
   timedEvent = this.time.addEvent({
